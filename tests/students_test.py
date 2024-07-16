@@ -39,6 +39,21 @@ def test_post_assignment_null_content(client, h_student_1):
     assert response.status_code == 400
 
 
+def test_post_assignment_empty_content(client, h_student_1):
+    """
+    failure case: content cannot be empty, or contains only spaces
+    """
+
+    response = client.post(
+        '/student/assignments',
+        headers=h_student_1,
+        json={
+            'content': '  '
+        })
+
+    assert response.status_code == 400
+
+
 def test_post_assignment_student_1(client, h_student_1):
     content = 'ABCD TESTPOST'
 

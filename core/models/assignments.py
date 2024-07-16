@@ -92,13 +92,12 @@ class Assignment(db.Model):
         
         # Ensure that assignment belongs to the teacher
         if (auth_principal.teacher_id is not None):
-            assertions.assert_valid(assignment.teacher_id == auth_principal.teacher_id, 'you can only grade assignments submitted to you')
+            assertions.assert_valid(assignment.teacher_id == auth_principal.teacher_id, 'you can only grade assignments submitted to you')        
         
         
         assignment.grade = grade
         assignment.state = AssignmentStateEnum.GRADED
         db.session.flush()
-        
         return assignment
 
     @classmethod
