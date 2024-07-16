@@ -22,7 +22,7 @@ def test_grade_assignment_draft_assignment(client, h_principal):
         '/principal/assignments/grade',
         json={
             'id': 5,
-            'grade': GradeEnum.A.value
+            'grade': GradeEnum.A.value,
         },
         headers=h_principal
     )

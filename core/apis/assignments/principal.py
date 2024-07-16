@@ -4,7 +4,7 @@ from core.apis import decorators
 from core.apis.responses import APIResponse
 from core.models.assignments import Assignment, Teacher
 
-from .schema import AssignmentSchema, AssignmentSubmitSchema
+from .schema import AssignmentSchema, AssignmentGradeSchema
 principal_assignments_resources = Blueprint('principal_assignments_resources', __name__)
 
 
@@ -32,9 +32,15 @@ def list_all_teachers(p):
 @decorators.accept_payload
 @decorators.authenticate_principal
 def regrade_assigment(p, incoming_payload):
-    """Create or Edit an assignment"""
-    graded_assignment = Assignment.mark_grade(incoming_payload['id'], incoming_payload['grade'], p)
+    """Regrade an assignment graded by a teacher"""
+    grade_assignment_payload = AssignmentGradeSchema().load(incoming_payload)
+
+    graded_assignment = Assignment.mark_grade(
+        _id=grade_assignment_payload.id,
+        grade=grade_assignment_payload.grade,
+        auth_principal=p
+    )
+    db.session.commit()
     graded_assignment_dump = AssignmentSchema().dump(graded_assignment)
-    
     return APIResponse.respond(data=graded_assignment_dump)
 
