@@ -64,13 +64,15 @@ def test_regrade_assignment(client, h_principal):
 
 def test_get_all_teachers(client, h_principal):
     response = client.get(
-        '/principal/assignments',
+        '/principal/teachers',  
         headers=h_principal
     )
 
     assert response.status_code == 200
 
     data = response.json['data']
-    teacher_id = [assignment['id'] for assignment in data]
-    print(teacher_id)
-    assert len(teacher_id) > 1
+    assert isinstance(data, list)  
+    assert len(data) > 0  # Ensure there are teachers returned
+
+    for teacher in data:
+        assert 'id' in teacher    
